@@ -9,12 +9,7 @@ void setup() {
   pinMode(left_wheel_back, OUTPUT);
   pinMode(right_wheel_back, OUTPUT);
   pinMode(left_wheel_front, OUTPUT);
-  pinMode(right_wheel_front, OUTPUT)
-
-  pinMode(4, OUTPUT);
-  pinMode(7, OUTPUT);
-  pinMode(8, OUTPUT);
-  pinMode(11, OUTPUT);
+  pinMode(right_wheel_front, OUTPUT);
 
   // initializing motor pins 
   // only the back wheels will be motored 
@@ -23,20 +18,9 @@ void setup() {
 
 }
 
-// void forward(){
-//   digitalWrite(5, LOW)
-//   digitalWrite(7, LOW)
-//   digitalWrite(9, LOW)
-//   digitalWrite(11, LOW)
-//   digitalWrite(4, LOW)
-//   digitalWrite(6, LOW)
-//   digitalWrite(8, LOW)
-//   digitalWrite(10, LOW)
-// }
-
 void forward(int speed){
   // makes the robot go forward based on the speed specified 
-  set_motor_speed(speed, speed);
+  set_motor_speed(speed, speed, speed, speed);
 }
 
 void left(int speed){
