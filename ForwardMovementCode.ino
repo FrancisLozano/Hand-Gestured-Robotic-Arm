@@ -18,13 +18,17 @@ void setup() {
   pinMode(9, OUTPUT);
   pinMode(10, OUTPUT);
   pinMode(11, OUTPUT);
+  pinMode(flexPin, INPUT)
   ClawGrip.attach(GRIP_SERVO_PIN);
   ClawRotator.attach(CLAW_ROTATION_SERVO_PIN);
 
+  //Initialize starting positions for servos
+  ClawGrip.write(90);
+  ClawRotator.write(90);
+
 }
-// Not sure if this is what we need, claw has more continuous movement based on sensor rather than just open/close
 void clawGripActivate(float sensorData){
-  int angle = map(sensorData,0,1000,0,180); //Change conversion, not sure if max flex sensor reading is 1023 or if max servo angle should be 180
+  int angle = map(sensorData,0,1023,0,180); //Adjust flex sensor readings
   ClawGrip.write(angle);
 }
 
@@ -36,9 +40,8 @@ void clawGripOpen(){
   ClawGrip.write(180); //assumes maximum rotation for servo is claw fully opened
 }
 
-//assumes servo's initial state is at 90 degrees
 void rotateClaw(float sensorData){
-  int angle = map(sensorData,0,1023,0,180); //Change conversion, not sure if max flex sensor reading is 1023 or if max servo angle should be 180
+  int angle = map(sensorData,0,1023,0,180); //Adjust flex sensor readings
   ClawRotator.write(angle);
 }
 
