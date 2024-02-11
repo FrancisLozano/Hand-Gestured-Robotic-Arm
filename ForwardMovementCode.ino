@@ -1,54 +1,228 @@
-const int left_wheel_back = 6;
-const int right_wheel_back = 5;
-const int left_wheel_front = 9;
-const int right_wheel_front = 10;
+// possibility up to change for pins 
+const int left_wheel_back_f = 6;
+const int right_wheel_back_f = 5;
+const int left_wheel_front_f = 9;
+const int right_wheel_front_f = 10;
+
+const int left_wheel_back_b = 7;
+const int right_wheel_back_b = 8;
+const int left_wheel_front_b = 11;
+const int right_wheel_front_b = 12;
+
 
 void setup() {
-  // put your setup code here, to run once:
+  // initialization of the wheels for forward and backward
+  pinMode(left_wheel_back_f, OUTPUT);
+  pinMode(right_wheel_back_f, OUTPUT);
+  pinMode(left_wheel_front_f, OUTPUT);
+  pinMode(right_wheel_front_f, OUTPUT);
 
-  pinMode(left_wheel_back, OUTPUT);
-  pinMode(right_wheel_back, OUTPUT);
-  pinMode(left_wheel_front, OUTPUT);
-  pinMode(right_wheel_front, OUTPUT);
+  pinMode(left_wheel_back_b, OUTPUT);
+  pinMode(right_wheel_back_b, OUTPUT);
+  pinMode(left_wheel_front_b, OUTPUT);
+  pinMode(right_wheel_front_b, OUTPUT);
 
-  // initializing motor pins 
-  // only the back wheels will be motored 
-  // when moving we'll only have one wheel move forward and the other going the opposite direction given if we want to move right or left
-  // intiializing sensors 
-
+  pinmode(A0, INPUT); // initialization of flex sensor, subject to change 
+  pinmode(A1, INPUT);
+  pinmode(A2, INPUT);
 }
 
-void forward(int speed){
-  // makes the robot go forward based on the speed specified 
-  set_motor_speed(speed, speed, speed, speed);
+// positional movements 
+
+void forward(){
+  // makes the robot go forward 
+  setLeftBackWheel(true, true);
+  setRightBackWheel(true, true);
+  setLeftFrontWheel(true, true);
+  setRightFrontWheel(true, true);
 }
 
-void left(int speed){
-  // makes the robot go left based on the speed specified
-  set_motor_speed(0, speed, 0, speed);
+void backward(){
+  // stops all movements of the robot
+  setLeftBackWheel(true, false);
+  setRightBackWheel(true, false);
+  setLeftFrontWheel(true, false);
+  setRightFrontWheel(true, false);
 }
 
-void right(int speed){
-  // makes the robot go right based on the speed specified
-  set_motor_speed(speed, 0, speed, 0);
+void forwardLeft(){
+  // makes the robot go forward left
+  setLeftBackWheel(false, false);
+  setRightBackWheel(true, true);
+  setLeftFrontWheel(true, true);
+  setRightFrontWheel(false, false);
+}
+
+void forwardRight(){
+  // makes the robot go forward right
+  setLeftBackWheel(true, true);
+  setRightBackWheel(false, false);
+  setLeftFrontWheel(false, false);
+  setRightFrontWheel(true, true);
+}
+
+void backwardLeft(){
+  // makes the robot go backward left
+  setLeftBackWheel(true, false);
+  setRightBackWheel(false, false);
+  setLeftFrontWheel(false, false);
+  setRightFrontWheel(true, false);
+}
+
+void backwardRight(){
+  // makes the robot go backward right
+  setLeftBackWheel(false, false);
+  setRightBackWheel(true, false);
+  setLeftFrontWheel(true, false);
+  setRightFrontWheel(false, false);
+}
+
+void left(){
+  // makes the robot move left 
+  setLeftBackWheel(true, false);
+  setRightBackWheel(true, true);
+  setLeftFrontWheel(true, true);
+  setRightFrontWheel(true, false);
+}
+
+void right(){
+  // makes the robot move right 
+  setLeftBackWheel(true, true);
+  setRightBackWheel(true, false);
+  setLeftFrontWheel(true, false);
+  setRightFrontWheel(true, true);
 }
 
 void stop(){
   // stops all movements of the robot
-  set_motor_speed(0, 0, 0, 0);
+  setLeftBackWheel(false, false);
+  setRightBackWheel(false, false);
+  setLeftFrontWheel(false, false);
+  setRightFrontWheel(false, false);
 }
 
-void set_motor_speed(int lsb, int rsb, int lsf, int rsf){
-  // analog write does only work on 3, 5, 6, 9, 10, 11
-  // takes in a parameter of left and right speed
-  analog.write(left_wheel_back, lsb);
-  analog.write(right_wheel_back, rsb);
-  analog.write(left_wheel_front, lsf);
-  analog.write(right_wheel_front, rsf);
+// angeled movements 
 
+void turnRight(){
+  setLeftBackWheel(true, true);
+  setRightBackWheel(true, false);
+  setLeftFrontWheel(true, false);
+  setRightFrontWheel(true, true);
+}
+
+void turnLeft(){
+  setLeftBackWheel(true, false);
+  setRightBackWheel(true, true);
+  setLeftFrontWheel(true, false);
+  setRightFrontWheel(true, true);
+}
+
+void curvedRight(){
+  // will need speed changes
+  setLeftBackWheel(true, true); // less speed
+  setRightBackWheel(true, true);
+  setLeftFrontWheel(true, true); // less speed
+  setRightFrontWheel(true, true);
+}
+
+void curvedLeft(){
+  // will need speed changes
+  setLeftBackWheel(true, true);
+  setRightBackWheel(true, true); // less speed 
+  setLeftFrontWheel(true, true);
+  setRightFrontWheel(true, true); // less speed
+}
+
+void lateralArcRight(){
+  setLeftBackWheel(false, false);
+  setRightBackWheel(false, false);
+  setLeftFrontWheel(true, false);
+  setRightFrontWheel(true, true);
+}
+
+void lateralArcLeft(){
+  setLeftBackWheel(false, false);
+  setRightBackWheel(false, false);
+  setLeftFrontWheel(true, true);
+  setRightFrontWheel(true, false);
+}
+
+void setLeftBackWheel(bool move, bool direction){
+  if(move == true) {
+    if(direction == true) {
+      digitalWrite(left_wheel_back_b, HIGH);
+    }
+    else {
+      digitalWrite(left_wheel_back_f, HIGH);
+    }
+  }
+  else{
+    digitalWrite(left_wheel_back_f, LOW);
+    digitalWrite(left_wheel_back_b, LOW);
+  }
+}
+
+void setRightBackWheel(bool move, bool direction){
+  if(move == true) {
+    if(direction == true) {
+      digitalWrite(left_wheel_back_b, HIGH);
+    }
+    else {
+      digitalWrite(left_wheel_back_f, HIGH);
+    }
+  }
+  else{
+    digitalWrite(left_wheel_back_f, LOW);
+    digitalWrite(left_wheel_back_b, LOW);
+  }
+}
+
+void setLeftFrontWheel(bool move, bool direction){
+  if(move == true) {
+    if(direction == true) {
+      digitalWrite(left_wheel_back_b, HIGH);
+    }
+    else {
+      digitalWrite(left_wheel_back_f, HIGH);
+    }
+  }
+  else{
+    digitalWrite(left_wheel_back_f, LOW);
+    digitalWrite(left_wheel_back_b, LOW);
+  }
+}
+
+void setLeftFrontWheel(bool move, bool direction){
+  if(move == true) {
+    if(direction == true) {
+      digitalWrite(left_wheel_back_b, HIGH);
+    }
+    else {
+      digitalWrite(left_wheel_back_f, HIGH);
+    }
+  }
+  else{
+    digitalWrite(left_wheel_back_f, LOW);
+    digitalWrite(left_wheel_back_b, LOW);
+  }
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  wristSensor = analogRead(A0);
+  thumbSensor = analogRead(A1);
+  pinkySensor = analogRead(A2);
 
+  if (wristSensor < 20) {
+    // still need to check for negative angle of bend for the flex sensor for backward
+    forward()
+  }
+
+  if (thumbSensor < 20) {
+    right()
+  }
+
+  if (pinkySensor < 20) {
+    left()
+  }
 }
