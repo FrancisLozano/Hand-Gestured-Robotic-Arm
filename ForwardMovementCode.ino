@@ -25,6 +25,9 @@ void setup() {
   pinmode(A0, INPUT); // initialization of flex sensor, subject to change 
   pinmode(A1, INPUT);
   pinmode(A2, INPUT);
+  pinmode(A3, INPUT);
+  pinmode(A4, INPUT);
+  pinmode(A5, INPUT);
 }
 
 // positional movements 
@@ -209,20 +212,39 @@ void setLeftFrontWheel(bool move, bool direction){
 
 void loop() {
   // put your main code here, to run repeatedly:
-  wristSensor = analogRead(A0);
-  thumbSensor = analogRead(A1);
-  pinkySensor = analogRead(A2);
+  int wristSensorF1 = analogRead(A0);
+  int wristSensorF2 = analogRead(A1);
+  int wristSensorB1 = analogRead(A2);
+  int wristSensorB2 = analogRead(A3);
+  int wristSensorForward = (wristSensorF1 + wristSensorF2) / 2;
+  int wristSensorBackward = (wristSensorB1 + wristSensorB2) / 2;
+  int thumbSensor = analogRead(A4);
+  int pinkySensor = analogRead(A5);
 
   if (wristSensor < 20) {
     // still need to check for negative angle of bend for the flex sensor for backward
     forward()
   }
+  else if (wristSensorBackward > 1000) {
+    backward();
+  }
+  else {
+    stop()
+  }
 
   if (thumbSensor < 20) {
     right()
+  }
+  else {
+    stop()
   }
 
   if (pinkySensor < 20) {
     left()
   }
+  else {
+    stop()
+  }
 }
+
+// need to check up on integration of average and also flex sensor of backward being above 1000
