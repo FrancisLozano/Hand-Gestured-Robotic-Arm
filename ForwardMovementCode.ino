@@ -42,6 +42,7 @@ void setup() {
   ClawGrip.write(90);
   ClawRotator.write(90);
   
+  Serial.begin(9600);
 
 }
 void clawGripActivate(float sensorData){
@@ -66,12 +67,12 @@ void rotateClaw(float sensorData){
 
 void armForward(float sensorData){
   angle = map(sensorData,0,1023,0,90);
-  armRotator.write(angle)
+  armRotator.write(angle);
 }
 
 void armBackward(float sensorData){
   angle = map(sensorData,0,1023,90,180)
-  armRotator.write(angle)
+  armRotator.write(angle);
 }
 
 
@@ -111,24 +112,23 @@ void loop() {
     stop();
   }
 
+  if(thumbSensor < 20){
+    clawGripClose();
+  } else {
+    clawGripOpen();
+  }
+
+  if (ringSensor < 20){
+    rotateClaw(ringSensor);
+  }
+
   if (wristSensorForward > 20) {
     //arm forward logic
     armForward(wristSensorForward);
-    if(thumbSensor < 20){
-      clawGripClose();
-    } else {
-      clawGripOpen();
-    }
 
-    if (ringSensor < 20){
-      rotateClaw(ringSensor);
-    }
-
-  } else if (wristSensorbackward > 20){
+  } else if (wristSensorBackward > 20){
     //arm backward logic
     armBackward(wristSensorBackward);
-  } else{
-    stop();
   }
 
 
