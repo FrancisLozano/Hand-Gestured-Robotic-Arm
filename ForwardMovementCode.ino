@@ -9,6 +9,12 @@ const int right_wheel_back_b = 8;
 const int left_wheel_front_b = 11;
 const int right_wheel_front_b = 12;
 
+#include <SoftwareSerial.h>
+SoftwareSerial Bluetooth(4, 2);  // 4 is the RX (Receive) pin and 2 is the TX (transmit) pin
+char pinkySensor = 0
+char thumbSensor = 0
+char wristUpSensor = 0
+char wristDownSensor = 0
 
 void setup() {
   // initialization of the wheels for forward and backward
@@ -28,6 +34,10 @@ void setup() {
   pinmode(A3, INPUT);
   pinmode(A4, INPUT);
   pinmode(A5, INPUT);
+  
+  // init for bluetooth
+  Bluetooth.begin(9600);
+  Serial.begin(9600);
 }
 
 // positional movements 
@@ -211,40 +221,39 @@ void setLeftFrontWheel(bool move, bool direction){
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  int wristSensorF1 = analogRead(A0);
-  int wristSensorF2 = analogRead(A1);
-  int wristSensorB1 = analogRead(A2);
-  int wristSensorB2 = analogRead(A3);
-  int wristSensorForward = (wristSensorF1 + wristSensorF2) / 2;
-  int wristSensorBackward = (wristSensorB1 + wristSensorB2) / 2;
-  int thumbSensor = analogRead(A4);
-  int pinkySensor = analogRead(A5);
-
-  if (wristSensor < 20) {
-    // still need to check for negative angle of bend for the flex sensor for backward
-    forward()
+  if(Bluetooth.available() > 0){
+    // it seems Bluetooth.read() will be the same thing regardless
+    result = Bluetooth.read();
   }
-  else if (wristSensorBackward > 1000) {
+
+  if(result == 'back-left'){
+    backwardLeft();
+  }
+  else if(result == 'front-left'){
+    forwardLeft();
+  }
+  else if(result == 'back-right'){
+    backwardRight();
+  }
+  else if(result == 'front-right'){
+    forwardRight();
+  }
+  else if(result == 'left'){
+    left();
+  }
+  else if(result == 'right'){
+    right();
+  }
+  else if(result == 'front'){
+    forward();
+  }
+  else if(result == 'back'){
     backward();
   }
-  else {
-    stop()
+  else if(result == 'stop'){
+    stop();
   }
 
-  if (thumbSensor < 20) {
-    right()
-  }
-  else {
-    stop()
-  }
 
-  if (pinkySensor < 20) {
-    left()
-  }
-  else {
-    stop()
-  }
 }
 
-// need to check up on integration of average and also flex sensor of backward being above 1000
