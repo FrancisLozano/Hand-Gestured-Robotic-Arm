@@ -1,5 +1,5 @@
 #include <SoftwareSerial.h>
-SoftwareSerial Bluetooth(11,10)
+SoftwareSerial Bluetooth(11,10); //coding logic error and included println to parse commands on the recieving end to have each command on a separate line.
 
 const int clawFlexPin = A5;
 const int flexPin2 = A6;
@@ -24,11 +24,12 @@ void setup(){
 void sendClawCommands(){
     int clawFlexValue = analogRead(clawFlexPin);
     if(clawFlexValue > 200){
-        Bluetooth.print('open');
+        Bluetooth.println('open');
     }
     else {
-        Bluetooth.print('close');
+        Bluetooth.println('close');
     }
+    delay(3000); // inserted delays after each function to prevent rapid transmission
 }
 
 void sendArmMovement(){
@@ -36,32 +37,34 @@ void sendArmMovement(){
     int backwardFlexValue = analogRead(flexPin3);
 
     if(500 >= backwardFlexValue && backwardFlexValue < 700){
-        Bluetooth.print('armFullyBack');
+        Bluetooth.println('armFullyBack');
     }
     else if(300 >= backwardFlexValue && backwardFlexValue < 500){
-        Bluetooth.print('armHalfwayBack');
+        Bluetooth.println('armHalfwayBack');
     }
     else if(100 >= backwardFlexValue && backwardFlexValue < 300){
-        Bluetooth.print('armSlightlyBack');
+        Bluetooth.println('armSlightlyBack');
     }
     if(500 >= forwardFlexValue && forwardFlexValue < 700){
-        Bluetooth.print('armFullyForward');
+        Bluetooth.println('armFullyForward');
     }
     else if(300 >= forwardFlexValue && forwardFlexValue < 500){
-        Bluetooth.print('armHalfwayForward');
+        Bluetooth.println('armHalfwayForward');
     }
     else if(100 >= forwardFlexValue && forwardFlexValue < 300){
-        Bluetooth.print('armSlightlyForward');
+        Bluetooth.println('armSlightlyForward');
     }
+    delay(3000);
 }
 
 void sendClawRotation(){
     int rotationFlexValue = analogRead(flexPin4);
     if (rotationFlexValue < 20){
-        Bluetooth.print('rotateClaw');
+        Bluetooth.println('rotateClaw');
     } else{
-        Bluetooth.print('resetRotation');
+        Bluetooth.println('resetRotation');
     }
+    delay(3000); 
 }
 
 
