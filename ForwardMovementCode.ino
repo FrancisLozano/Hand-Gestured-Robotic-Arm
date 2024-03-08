@@ -66,12 +66,12 @@ void rotateClaw(float sensorData){
 }
 
 void armForward(float sensorData){
-  angle = map(sensorData,0,1023,0,90);
+  int angle = map(sensorData,0,1023,0,90);
   armRotator.write(angle);
 }
 
 void armBackward(float sensorData){
-  angle = map(sensorData,0,1023,90,180)
+  int angle = map(sensorData,0,1023,90,180);
   armRotator.write(angle);
 }
 
